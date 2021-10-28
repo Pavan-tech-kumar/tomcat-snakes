@@ -22,3 +22,24 @@ steps:
 
   # - script: sudo apt update && sudo apt install openjdk-8-jdk && java -version
   #   displayName: 'Installing the java 8 and checking the version'
+
+  - script: ls -al && mv ROOT.war ROOT$(Build.BuildId).war && ls -al
+    displayName: 'List Files & Rename ROOT.war'
+
+  
+  - task: CopyFiles@2
+    inputs:
+      Contents: 'ROOT$(Build.BuildId).war'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      OverWrite: true
+  
+  - script: ls -al $(Build.ArtifactStagingDirectory)
+    displayName: 'List Files Build Artifact Staging directory'
+    
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'ROOT$(Build.BuildId).war'
+      publishLocation: 'Container'
+  
+  
