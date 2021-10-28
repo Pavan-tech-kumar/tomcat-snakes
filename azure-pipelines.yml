@@ -42,4 +42,11 @@ steps:
       ArtifactName: 'ROOT$(Build.BuildId).war'
       publishLocation: 'Container'
   
-  
+  - task: S3Upload@1
+    inputs:
+      awsCredentials: 'aws-azurede-connection'
+      regionName: 'ap-northeast-1'
+      bucketName: 'aws-azuredevops'
+      sourceFolder: '$(Build.ArtifactStagingDirectory)'
+      globExpressions: 'ROOT$(Build.BuildId).war'
+      storageClass: 'REDUCED_REDUNDANCY'
